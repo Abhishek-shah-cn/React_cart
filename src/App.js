@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import fire from "./fire";
 import Login from "./Login";
 
-import home from "./home";
+import Hero from "./Hero";
 import "./App.css";
 
 const App = () => {
@@ -29,7 +29,7 @@ const App = () => {
       .auth()
       .signInWithEmailAndPassword(email, password)
       .catch((err) => {
-        switch (err.data) {
+        switch (err.code) {
           case "auth/Invalid-email":
           case "auth/user-disabled":
           case "auth/user-not-found":
@@ -47,7 +47,7 @@ const App = () => {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .catch((err) => {
-        switch (err.data) {
+        switch (err.code) {
           case "auth/email-already-in-use":
           case "auth/Invalid-email":
             setEmailError(err.message);
@@ -74,10 +74,14 @@ const App = () => {
     });
   };
 
+  useEffect(() => {
+    authListener();
+  }, []);
+
   return (
     <div className="App">
       {user ? (
-        <home handlelogout={handlelogout} />
+        <Hero handlelogout={handlelogout} />
       ) : (
         <Login
           email={email}
